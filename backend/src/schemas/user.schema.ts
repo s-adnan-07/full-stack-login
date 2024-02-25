@@ -13,8 +13,11 @@ export const NameSchema = SchemaFactory.createForClass(Name)
 
 @Schema()
 export class User {
-  @Prop({ type: NameSchema })
-  name: Name
+  @Prop({ required: true })
+  firstName: string
+
+  @Prop()
+  lastName?: string
 
   @Prop({ required: true, unique: true })
   email: string
@@ -30,3 +33,8 @@ export class User {
 }
 
 export const UserSchema = SchemaFactory.createForClass(User)
+
+UserSchema.pre('save', function () {
+  this.created_at ??= new Date()
+  this.updated_at = new Date()
+})
