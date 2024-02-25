@@ -1,16 +1,12 @@
 import { Injectable } from '@nestjs/common'
 import { InjectModel } from '@nestjs/mongoose'
 import { Model } from 'mongoose'
-import { Name, User } from 'src/schemas/user.schema'
+import { User } from 'src/schemas/user.schema'
 import { CreateUserDto } from '../dtos/create-user.dto'
-import { GetUserDto } from '../dtos/get-user.dto'
 
 @Injectable()
 export class UsersService {
-  constructor(
-    @InjectModel(User.name) private userModel: Model<User>,
-    // @InjectModel(Name.name) private nameModel: Model<Name>,
-  ) {}
+  constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   async createUser(createUserDto: CreateUserDto) {
     const newUser = new this.userModel(createUserDto)
@@ -20,8 +16,10 @@ export class UsersService {
     return { firstName, lastName, email }
   }
 
-  getUser(getUserDto: GetUserDto) {
-    const { email } = getUserDto
+  // This will be used by auth service to authenticate user
+  // So dont include a route for this but keep the service
+  // Removed getUserDto coz that will be handled by auth route
+  async getUser(email: string) {
     return this.userModel.findOne({ email }).exec()
   }
 
