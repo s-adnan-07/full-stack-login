@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose'
 
 @Schema()
-class Name {
+export class Name {
   @Prop({ required: true })
   first: string
 
@@ -9,7 +9,7 @@ class Name {
   last?: string
 }
 
-const NameSchema = SchemaFactory.createForClass(Name)
+export const NameSchema = SchemaFactory.createForClass(Name)
 
 @Schema()
 export class User {
