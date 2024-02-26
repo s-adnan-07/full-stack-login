@@ -7,6 +7,8 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe())
   app.setGlobalPrefix('api')
+  // To enable requests from forntend
+  app.enableCors()
 
   await app.listen(3000)
 }

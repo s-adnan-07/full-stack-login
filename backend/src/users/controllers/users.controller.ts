@@ -12,10 +12,4 @@ export class UsersController {
   async createUser(@Body() createUserDto: CreateUserDto) {
     return this.usersService.createUser(createUserDto)
   }
-
-  // For testing
-  @Get('all')
-  getAllUsers() {
-    return this.usersService.getAllUsers()
-  }
 }
