@@ -1,0 +1,51 @@
+version: '3'
+services:
+  prod_server:
+    container_name: prod_server
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    ports:
+      - '3000:3000'
+    environment:
+      - PORT=3000
+      - FRONT_END='http://localhost:5173'
+      - JWT_SECRET=MyAweSomeJWTSecretThatNoOneCanGuess
+      - TOKEN_ALIVE_TIME=1h
+      - MONGO_USERNAME=admin
+      - MONGO_PASSWORD=admin
+      - HOST=mongo_db_prod
+    volumes:
+      - ./backend/src:/usr/src/app/src
+    command: yarn start:prod
+
+  mongo_db_prod:
+    container_name: mongo_db_prod
+    image: mongo:7.0.5
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+      - MONGO_INITDB_DATABASE=masterDB
+    volumes:
+      - mongo_prod:/data/configdb
+      - mongo_prod:/data/db
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+    ports:
+      - '27017:27017'
+    restart: always
+
+  prod_client:
+    container_name: prod_client
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    volumes:
+      - ./frontend/src:/usr/src/client/src
+    ports:
+      - '8080:80'
+    environment:
+      - REGISTER_URL='http://localhost:3000/api/auth/register'
+      - LOGIN_URL='http://localhost:3000/api/auth/login'
+
+volumes:
+  mongo_prod:

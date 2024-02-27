@@ -27,8 +27,8 @@ export class UserExceptionFilter implements ExceptionFilter {
 
     const message =
       errorCode == DUPLICATE_KEY_ERROR
-        ? 'User Already Exists !!!'
-        : exception.message
+        ? ['User Already Exists !!!']
+        : [exception.message]
 
     this.logger.error(exception.errmsg)
 
