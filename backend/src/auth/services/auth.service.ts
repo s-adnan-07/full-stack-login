@@ -2,6 +2,7 @@ import {
   HttpStatus,
   Inject,
   Injectable,
+  Logger,
   UnauthorizedException,
 } from '@nestjs/common'
 import { JwtService } from '@nestjs/jwt'
@@ -16,6 +17,8 @@ export class AuthService {
     private jwtService: JwtService,
     @Inject('USERS_SERVICE') private readonly usersService: UsersService,
   ) {}
+
+  private readonly logger = new Logger(AuthService.name)
 
   async hashPassword(password: string) {
     return bcrypt.hash(password, 10)
@@ -36,6 +39,8 @@ export class AuthService {
       password: hashedPassword,
     })
 
+    this.logger.log(`User '${firstName}' created in database`)
+
     return {
       statusCode: HttpStatus.CREATED,
       message: `User '${firstName}' created successfully`,
@@ -45,12 +50,20 @@ export class AuthService {
   async signIn({ email, password }: GetUserDto): Promise<any> {
     const user = await this.usersService.getUser(email)
 
-    if (!user) throw new UnauthorizedException()
+    if (!user) {
+      this.logger.error(`User with email '${email}' does not exist!`)
+      throw new UnauthorizedException()
+    }
 
     const passwordsMatch = await this.comparePasswords(password, user.password)
-    if (!passwordsMatch) throw new UnauthorizedException()
+    if (!passwordsMatch) {
+      this.logger.error(`Incorrect password entered for user '${email}'!`)
+      throw new UnauthorizedException()
+    }
 
     const { firstName, lastName, email: userEmail } = user
+    this.logger.log(`Successfully retrieved user '${userEmail}'`)
+
     return this.jwtService.sign({ firstName, lastName, userEmail })
   }
 }

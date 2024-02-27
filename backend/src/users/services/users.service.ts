@@ -12,8 +12,8 @@ export class UsersService {
     const newUser = new this.userModel(createUserDto)
 
     // Serializing user
-    const { firstName, lastName } = await newUser.save()
-    return { firstName, lastName }
+    const { firstName, lastName, email } = await newUser.save()
+    return { firstName, lastName, email }
   }
 
   // This will be used by auth service to authenticate user
