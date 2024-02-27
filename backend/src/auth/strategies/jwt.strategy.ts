@@ -15,7 +15,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   // This method is called if jwt is verified
   // Payload is data signed in authservice
   validate(payload: any) {
-    console.log(payload)
     return payload
   }
 }
