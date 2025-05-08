@@ -1,3 +1,5 @@
+# Full Stack Login Assignment
+
 If running in docker comtainer ensure you replace 'localhost' with service name in backend
 
 e.g. `mongodb://localhost:27017` will become `mongodb://mongo_db_dev:27017`
@@ -44,6 +46,6 @@ If you wish to run this app on your local machine ensure you have `node 18` or a
 - Guarded Routes
 - Duplicate key (user already exists) error handling
 
-## Issues
+## Issues [:arrow_up:](#full-stack-login-assignment)
 
 - .env files not implemented due to time constraints
